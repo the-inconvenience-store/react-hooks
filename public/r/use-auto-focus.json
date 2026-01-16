@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-auto-focus",
+  "type": "registry:hook",
+  "title": "useAutoFocus",
+  "description": "Auto-focus input hook",
+  "registryDependencies": [
+    "use-mobile"
+  ],
+  "files": [
+    {
+      "path": "registry/hooks/use-auto-focus.ts",
+      "content": "\"use client\";\n\nimport { useEffect, useRef } from \"react\";\nimport { useIsMobile } from \"./use-mobile\";\n\ninterface UseAutoFocusOptions {\n  /** Whether to re-focus when the tab/window regains visibility. Default: true */\n  focusOnVisibilityChange?: boolean;\n  /** Whether to disable auto-focus on mobile devices. Default: false */\n  disableOnMobile?: boolean;\n  /** Delay in ms before focusing. Default: 0 */\n  delay?: number;\n  /** Whether auto-focus is enabled. Default: true */\n  enabled?: boolean;\n}\n\n/**\n * Hook to automatically focus an input element on mount and optionally\n * when the tab/window regains focus.\n *\n * @param options - Configuration options for auto-focus behavior\n * @returns A ref to attach to the input element\n */\nexport function useAutoFocus<T extends HTMLElement = HTMLInputElement>(\n  options: UseAutoFocusOptions = {}\n) {\n  const {\n    focusOnVisibilityChange = true,\n    disableOnMobile = false,\n    delay = 0,\n    enabled = true,\n  } = options;\n\n  const ref = useRef<T>(null);\n  const isMobile = useIsMobile();\n\n  useEffect(() => {\n    // Skip if disabled or on mobile when disableOnMobile is true\n    if (!enabled || (disableOnMobile && isMobile)) {\n      return;\n    }\n\n    const focus = () => {\n      if (ref.current) {\n        ref.current.focus();\n      }\n    };\n\n    // Focus on mount (with optional delay)\n    const timer = setTimeout(focus, delay);\n\n    // Handle visibility change (tab/window focus)\n    const handleVisibilityChange = () => {\n      if (focusOnVisibilityChange && document.visibilityState === \"visible\") {\n        focus();\n      }\n    };\n\n    if (focusOnVisibilityChange) {\n      document.addEventListener(\"visibilitychange\", handleVisibilityChange);\n    }\n\n    return () => {\n      clearTimeout(timer);\n      if (focusOnVisibilityChange) {\n        document.removeEventListener(\n          \"visibilitychange\",\n          handleVisibilityChange\n        );\n      }\n    };\n  }, [enabled, focusOnVisibilityChange, disableOnMobile, isMobile, delay]);\n\n  return ref;\n}\n",
+      "type": "registry:hook"
+    }
+  ]
+}

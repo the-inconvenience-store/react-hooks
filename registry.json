@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "react-hooks",
+  "homepage": "https://react-hooks.dev",
+  "items": [
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "use-auto-focus",
+      "type": "registry:hook",
+      "title": "useAutoFocus",
+      "description": "Auto-focus input hook",
+      "registryDependencies": ["use-mobile"],
+      "files": [
+        {
+          "path": "registry/hooks/use-auto-focus.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "use-mobile",
+      "type": "registry:hook",
+      "title": "useMobile",
+      "description": "Use mobile breakpoints hook",
+      "files": [
+        {
+          "path": "registry/hooks/use-mobile.ts",
+          "type": "registry:hook"
+        }
+      ]
+    }
+  ]
+}
